@@ -17,7 +17,7 @@ type (
 		db *sqlx.DB
 	}
 )
-
+// アカウント構造体をnil値で初期化し、account構造体がrepository.Accountインターフェースを実装していることを確認
 var _ repository.Account = (*account)(nil)
 
 // Create accout repository

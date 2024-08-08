@@ -11,6 +11,7 @@ import (
 
 type Status interface {
 	AddStatus(ctx context.Context, content string, account *object.Account) (*AddStatusDTO, error)
+	Get(ctx context.Context, id int) (*GetStatusDTO, error)
 }
 
 type status struct {
@@ -35,7 +36,7 @@ type AddStatusDTO struct {
 // }
 
 type GetStatusDTO struct {
-
+	Status *object.Status
 }
 
 var _ Status = (*status)(nil)
@@ -75,13 +76,13 @@ func (s *status) AddStatus(ctx context.Context, content string, account *object.
 
 }
 
-// func (s *status) Get(ctx context.Context, id string) (*GetStatusDTO, error) {
-// 	status, err := s.statusRepo.FindByID(ctx, id)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+func (s *status) Get(ctx context.Context, id int) (*GetStatusDTO, error) {
+	status, err := s.statusRepo.FindByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return &GetStatusDTO{
-// 		Status: status,
-// 	}, nil
-// }
+	return &GetStatusDTO{
+		Status: status,
+	}, nil
+}

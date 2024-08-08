@@ -3,9 +3,12 @@ package statuses
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 	"yatter-backend-go/app/domain/auth"
 	"yatter-backend-go/app/domain/object"
+
+	"github.com/go-chi/chi/v5"
 )
 
 // Request body for `POST /v1/statuses`
@@ -67,27 +70,33 @@ func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func (h *handler) Get(w http.ResponseWriter, r *http.Request) {
-// 	id := chi.URLParam(r, "id")
-// 	if id == "" {
-// 		http.Error(w, "id is required", http.StatusBadRequest)
-// 		return
-// 	}
+func (h *handler) Get(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	if idStr == "" {
+		http.Error(w, "id is required", http.StatusBadRequest)
+		return
+	}
 
-// 	// リクエストのコンテキスト(リクエストのメタデータを持つオブジェクト)を取得
-// 	ctx := r.Context()
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "id must be a number", http.StatusBadRequest)
+		return
+	}
 
-// 	dto, err := h.statusUsecase.Get(ctx, id)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
+	// リクエストのコンテキスト(リクエストのメタデータを持つオブジェクト)を取得
+	ctx := r.Context()
 
-// 	// レスポンスヘッダーにContent-Typeを設定
-// 	w.Header().Set("Content-Type", "application/json")
-// 	// レスポンスボディにエンコードされたJSONを書き込む
-// 	if err := json.NewEncoder(w).Encode(dto.Status); err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-// }
+	dto, err := h.statusUsecase.Get(ctx, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// レスポンスヘッダーにContent-Typeを設定
+	w.Header().Set("Content-Type", "application/json")
+	// レスポンスボディにエンコードされたJSONを書き込む
+	if err := json.NewEncoder(w).Encode(dto.Status); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}

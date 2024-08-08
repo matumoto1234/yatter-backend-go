@@ -25,7 +25,11 @@ func NewRouter(ar repository.Account, su usecase.Status) http.Handler {
 		r.Use(auth.Middleware(ar))
 		h := &handler{statusUsecase: su}
 		r.Post("/", h.Create)
+		
 	})
+
+	h := &handler{statusUsecase: su}
+	r.Get("/{id}", h.Get)
 
 	return r
 }

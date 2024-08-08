@@ -34,3 +34,13 @@ func (s *status) AddStatus(ctx context.Context, tx *sqlx.Tx, status *object.Stat
 
 	return nil
 }
+
+func (s *status) FindByID(ctx context.Context, id int) (*object.Status, error) {
+	status := new(object.Status)
+	err := s.db.QueryRowxContext(ctx, "select * from status where id = ?", id).StructScan(status)
+	if err != nil {
+		return nil, fmt.Errorf("failed to select status: %w", err)
+	}
+
+	return status, nil
+}

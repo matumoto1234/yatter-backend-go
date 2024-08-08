@@ -34,6 +34,10 @@ type AddStatusDTO struct {
 // 	CreatedAt time.Time 
 // }
 
+type GetStatusDTO struct {
+
+}
+
 var _ Status = (*status)(nil)
 
 func NewStatus(db *sqlx.DB, statusRepo repository.Status) *status {
@@ -70,3 +74,14 @@ func (s *status) AddStatus(ctx context.Context, content string, account *object.
 	return &AddStatusDTO{Status: status}, nil
 
 }
+
+// func (s *status) Get(ctx context.Context, id string) (*GetStatusDTO, error) {
+// 	status, err := s.statusRepo.FindByID(ctx, id)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return &GetStatusDTO{
+// 		Status: status,
+// 	}, nil
+// }

@@ -27,7 +27,7 @@ func NewStatus(db *sqlx.DB) *status {
 // AddStatus : データベースにステータスを追加
 func (s *status) AddStatus(ctx context.Context, tx *sqlx.Tx, status *object.Status)error{
 	_, err := s.db.ExecContext(ctx, "insert into status (account_id, content, url, created_at) values (?, ?, ?, ?)",
-		status.Account.ID, status.Content, status.URL, status.CreatedAt)
+		status.AccountID, status.Content, status.URL, status.CreatedAt)
 	if err != nil {
 		return fmt.Errorf("failed to insert status: %w", err)
 	}

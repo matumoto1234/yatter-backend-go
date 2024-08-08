@@ -6,7 +6,7 @@ import (
 
 type Status struct {
 	ID        int       `json:"id,omitempty"`
-	Account   *Account      `json:"account,omitempty" db:"account"`
+	AccountID  int      `json:"account,omitempty" db:"account"`
 	URL       *string   `json:"url,omitempty" db:"url"`
 	Content   string    `json:"status"`
 	CreatedAt time.Time `json:"created_at,omitempty" db:"created_at"`
@@ -15,7 +15,7 @@ type Status struct {
 func NewStatus(content string, account *Account) *Status {
 	return &Status{
 		Content:   content,
-		Account:   account,
+		AccountID:   int(account.ID),
 		CreatedAt: time.Now(),
 	}
 }

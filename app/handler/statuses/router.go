@@ -11,12 +11,11 @@ import (
 
 // Implementation of handler
 type handler struct {
-	ar repository.Account
 	statusUsecase usecase.Status
 }
 
 // Create Handler for `/v1/statuses/`
-func NewRouter(ar repository.Account) http.Handler {
+func NewRouter(ar repository.Account, su usecase.Status) http.Handler {
 	r := chi.NewRouter()
 
 	// r.Group()により、特定のグループに対してミドルウェアを適用する
@@ -24,7 +23,7 @@ func NewRouter(ar repository.Account) http.Handler {
 	r.Group(func(r chi.Router) {
 		// リクエストの認証を行う
 		r.Use(auth.Middleware(ar))
-		h := &handler{ar: ar}
+		h := &handler{statusUsecase: su}
 		r.Post("/", h.Create)
 	})
 

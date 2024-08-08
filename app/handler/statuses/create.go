@@ -14,6 +14,11 @@ type AddRequest struct {
 	Account *object.Account
 }
 
+// レスポンスの方を定義
+type AddResponse struct {
+	
+}
+
 // Handle request for `POST /v1/statuses`
 func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 	var req AddRequest
@@ -45,7 +50,6 @@ func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 
 	
 	// panic(fmt.Sprintf("Must Implement Status Creation And Check Acount Info %v", account_info))
-
 
 	// レスポンスヘッダーにContent-Typeを設定
 	w.Header().Set("Content-Type", "application/json")

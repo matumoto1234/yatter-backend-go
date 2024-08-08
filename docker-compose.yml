@@ -13,6 +13,7 @@ services:
     volumes:
       - "./.data/mysql:/var/lib/mysql"
       - "./ddl:/docker-entrypoint-initdb.d"
+      - "yatter:/var/lib/mysql"
     restart: on-failure
 
   web:
@@ -51,3 +52,6 @@ services:
       - ./openapi.yml:/data/openapi.yml
     environment:
       SWAGGER_JSON: /data/openapi.yml
+
+volumes:
+  yatter:

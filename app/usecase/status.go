@@ -19,9 +19,21 @@ type status struct {
 	statusRepo repository.Status
 }
 
+// AddStatusDTO : ステータスを追加する際のデータ転送オブジェクトの構造体
+// この実装だと、ドメイン層が変更した場合に、この構造体( AddStatus の返り値)も変更する必要がある
+// なので、ドメイン層が変更しても AddStatus の返り値を変更しなくてもいいように、useCase 用の型を定義するのが良い
 type AddStatusDTO struct {
 	Status *object.Status
 }
+
+// useCase 用の型を定義する
+// type AddStatusUseCaseDTO struct {
+// 	ID        int       
+// 	Account   *Account   
+// 	URL       *string   
+// 	Content   string    
+// 	CreatedAt time.Time 
+// }
 
 var _ Status = (*status)(nil)
 

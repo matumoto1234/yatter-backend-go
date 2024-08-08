@@ -2,7 +2,6 @@ package statuses
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"yatter-backend-go/app/domain/auth"
 	"yatter-backend-go/app/domain/object"
@@ -38,9 +37,6 @@ func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	req.Account = accountPtr
-
-	fmt.Println("req: \n", req.Account)
-
 	// AddStatusメソッドが実行されて、エラーが発生した場合は、500 Internal Server Errorを返す
 	dto, err := h.statusUsecase.AddStatus(ctx, req.Status, req.Account)
 	if err != nil {

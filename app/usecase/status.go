@@ -3,7 +3,6 @@ package usecase
 // パッケージ(package 〇〇)を import
 import (
 	"context"
-	"fmt"
 	"yatter-backend-go/app/domain/object"
 	"yatter-backend-go/app/domain/repository"
 
@@ -45,12 +44,8 @@ func NewStatus(db *sqlx.DB, statusRepo repository.Status) *status {
 }
 
 func (s *status) AddStatus(ctx context.Context, content string, account *object.Account) (*AddStatusDTO, error) {
-	fmt.Println("hello")
-	fmt.Println("content",content)
-	fmt.Println("account",account)
 	// objectパッケージのNewStatus関数を呼び出し、ステータスを作成
 	status := object.NewStatus(content, account)
-	fmt.Println("status",status)
 	
 	// トランザクションを開始する関数
 	tx, err := s.db.Beginx()

@@ -3,6 +3,7 @@ package usecase
 // パッケージ(package 〇〇)を import
 import (
 	"context"
+	"time"
 	"yatter-backend-go/app/domain/object"
 	"yatter-backend-go/app/domain/repository"
 
@@ -11,7 +12,8 @@ import (
 
 type Status interface {
 	AddStatus(ctx context.Context, content string, account *object.Account) (*AddStatusDTO, error)
-	Get(ctx context.Context, id int) (*GetStatusDTO, error)
+	Get(ctx context.Context, id int) (*GetStatusWithAccount, error)
+	
 }
 
 type status struct {
@@ -35,8 +37,12 @@ type AddStatusDTO struct {
 // 	CreatedAt time.Time 
 // }
 
-type GetStatusDTO struct {
-	Status *object.Status
+type GetStatusWithAccount struct {
+	ID int
+	Account *object.Account
+	URL *string
+	Content string
+	CreatedAt time.Time
 }
 
 var _ Status = (*status)(nil)
@@ -76,13 +82,24 @@ func (s *status) AddStatus(ctx context.Context, content string, account *object.
 
 }
 
-func (s *status) Get(ctx context.Context, id int) (*GetStatusDTO, error) {
+func (s *status) Get(ctx context.Context, id int) (*GetStatusWithAccount, error) {
 	status, err := s.statusRepo.FindByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 
-	return &GetStatusDTO{
-		Status: status,
+	accountId := status.AccountID
+
+	account, err := s.statusRepo.FindAccountByID(ctx, accountId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &GetStatusWithAccount{
+		ID: status.ID,
+		Account: account,
+		URL: status.URL,
+		Content: status.Content,
+		CreatedAt: status.CreatedAt,
 	}, nil
 }

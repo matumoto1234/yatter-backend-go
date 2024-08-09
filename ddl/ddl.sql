@@ -14,7 +14,7 @@ CREATE TABLE `account` (
 Drop TABLE IF EXISTS `status`;
 CREATE TABLE `status` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `account_id` bigint(20) NOT NULL,
+  `account_id` bigint(20) NOT NULL REFERENCES `account`(`id`),
   `content` text NOT NULL,
   `url` text,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,

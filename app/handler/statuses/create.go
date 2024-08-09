@@ -25,6 +25,14 @@ type AddResponse struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 }
 
+type GetResponse struct {
+	ID        int       `json:"id"`
+	Account   *object.Account `json:"account"`
+	URL       *string   `json:"url,omitempty"`
+	Content   string    `json:"status"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
+}
+
 // Handle request for `POST /v1/statuses`
 func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 	var req AddRequest
@@ -95,7 +103,16 @@ func (h *handler) Get(w http.ResponseWriter, r *http.Request) {
 	// レスポンスヘッダーにContent-Typeを設定
 	w.Header().Set("Content-Type", "application/json")
 	// レスポンスボディにエンコードされたJSONを書き込む
-	if err := json.NewEncoder(w).Encode(dto.Status); err != nil {
+
+	res := GetResponse{
+		ID: dto.ID,
+		Account: dto.Account,
+		URL: dto.URL,
+		Content: dto.Content,
+		CreatedAt: dto.CreatedAt,
+	}
+
+	if err := json.NewEncoder(w).Encode(res); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

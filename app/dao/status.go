@@ -44,3 +44,13 @@ func (s *status) FindByID(ctx context.Context, id int) (*object.Status, error) {
 
 	return status, nil
 }
+
+func (s *status) FindAccountByID(ctx context.Context, id int) (*object.Account, error) {
+	account := new(object.Account)
+	err := s.db.QueryRowxContext(ctx, "select * from account where id = ?", id).StructScan(account)
+	if err != nil {
+		return nil, fmt.Errorf("failed to select account: %w", err)
+	}
+
+	return account, nil
+}

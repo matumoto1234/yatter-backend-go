@@ -20,7 +20,9 @@ type (
 var _ repository.Status = (*status)(nil)
 
 // NewStatus : Create status repository
-func NewStatus(db *sqlx.DB) *status {
+// var _ repository.Status = (*status)(nil) で、status が repository.Status インターフェースを実装しているかをチェックしている
+// なので、返り値の型を *status ではなく repository.Status になる
+func NewStatus(db *sqlx.DB) repository.Status {
 	return &status{db: db}
 }
 

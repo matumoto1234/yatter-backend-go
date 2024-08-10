@@ -3,6 +3,7 @@ package usecase
 // パッケージ(package 〇〇)を import
 import (
 	"context"
+	"fmt"
 	"time"
 	"yatter-backend-go/app/domain/object"
 	"yatter-backend-go/app/domain/repository"
@@ -45,9 +46,11 @@ type GetStatusWithAccount struct {
 	CreatedAt time.Time
 }
 
+// Status が Status インターフェースを実装しているかをチェック
 var _ Status = (*status)(nil)
 
-func NewStatus(db *sqlx.DB, statusRepo repository.Status) *status {
+// *status -> Status に変更することで、useCase から repository に依存しないようにする
+func NewStatus(db *sqlx.DB, statusRepo repository.Status) Status {
 	return &status{
 		db:          db,
 		statusRepo: statusRepo,
@@ -75,7 +78,9 @@ func (s *status) AddStatus(ctx context.Context, content string, account *object.
 	}()
 
 	if err := s.statusRepo.AddStatus(ctx, tx, status); err != nil {
-		return nil, err
+		// return nil, err
+		// エラーの書き方
+		return nil, fmt.Errorf("statusRepo.AddStatus(accountID): %d): %v", status.AccountID, err)
 	}
 
 	return &AddStatusDTO{Status: status}, nil
